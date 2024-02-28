@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic-Tac-Toe</title>
+    <style>
+        .grid 
+        {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-gap: 5px;
+            max-width: 300px;
+            margin: auto;
+        }
+        
+        .grid div 
+        {
+            background-color: rgb(163, 163, 163);
+            aspect-ratio: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2em;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Tic-Tac-Toe</h1>
+    <div id="gameStatus">Player X's turn</div>
+    <div class="grid">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+    <button onclick="resetGame()">Reset Game</button>
+    <script>
+        const squares = document.querySelectorAll('.grid div');
+        let currentPlayer = 'X';
+        const gameStatus = document.getElementById('gameStatus');
+
+        function checkWin() {
+            const winCombinations = [
+                [0, 1, 2],
+                [3, 4, 5],
+                [6, 7, 8],
+                [0, 3, 6],
+                [1, 4, 7],
+                [2, 5, 8],
+                [0, 4, 8],
+                [2, 4, 6]
+            ];
+
+            for (let i = 0; i < winCombinations.length; i++) {
+                const [a, b, c] = winCombinations[i];
+                if (squares[a].textContent && squares[a].textContent === squares[b].textContent && squares[a].textContent === squares[c].textContent) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function checkTie() {
+            return [...squares].every(square => square.textContent !== '');
+        }
+
+        function handleClick() {
+            if (this.textContent === '') 
+            {
+                this.textContent = currentPlayer;
+                if (checkWin()) {
+                    gameStatus.textContent = `Player ${currentPlayer} Wins!`;
+                    squares.forEach(square => square.removeEventListener('click', handleClick));
+                    return;
+                }
+                if (checkTie()) {
+                    gameStatus.textContent = 'Tie!';
+                    return;
+                }
+                currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+                gameStatus.textContent = `Player ${currentPlayer}'s turn`;
+            }
+        }
+
+        function resetGame() {
+            squares.forEach(square => {
+                square.textContent = '';
+                square.addEventListener('click', handleClick);
+            });
+            currentPlayer = 'X';
+            gameStatus.textContent = "Player X's turn";
+        }
+
+        squares.forEach(square => {
+            square.addEventListener('click', handleClick);
+        });
+
+        resetGame(); // Initialize the game
+    </script>
+</body>
+</html>

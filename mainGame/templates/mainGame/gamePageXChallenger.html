@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHALLENGER</title>
+    
+</head>
+<body>
+   <P>THIS IS CHALLENGER</P>
+   <p id="game_code">Generated Code: {{ game_code }}</p>
+    <P>Game State: {{gameState}}</P>
+    <P>Player X Value: {{playerXarr}}</P>
+    {% csrf_token %}
+    <table id = tableX>
+        <tr>
+            <td>
+                <select>
+                    <option value=""></option> <!-- Empty choice -->
+                    <option value="X">X</option> <!-- Choice "X" -->
+                </select>
+            </td>
+            <td>
+                <select>
+                    <option value=""></option> <!-- Empty choice -->
+                    <option value="X">X</option> <!-- Choice "X" -->
+                </select>
+            </td>
+            <td>
+                <select>
+                    <option value=""></option> <!-- Empty choice -->
+                    <option value="X">X</option> <!-- Choice "X" -->
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <select>
+                    <option value=""></option> <!-- Empty choice -->
+                    <option value="X">X</option> <!-- Choice "X" -->
+                </select>
+            </td>
+            <td>
+                <select>
+                    <option value=""></option> <!-- Empty choice -->
+                    <option value="X">X</option> <!-- Choice "X" -->
+                </select>
+            </td>
+            <td>
+                <select>
+                    <option value=""></option> <!-- Empty choice -->
+                    <option value="X">X</option> <!-- Choice "X" -->
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <select>
+                    <option value=""></option> <!-- Empty choice -->
+                    <option value="X">X</option> <!-- Choice "X" -->
+                </select>
+            </td>
+            <td>
+                <select>
+                    <option value=""></option> <!-- Empty choice -->
+                    <option value="X">X</option> <!-- Choice "X" -->
+                </select>
+            </td>
+            <td>
+                <select>
+                    <option value=""></option> <!-- Empty choice -->
+                    <option value="X">X</option> <!-- Choice "X" -->
+                </select>
+            </td>
+        </tr>
+    </table>
+    {% csrf_token %}
+</body>
+</html>
+<script>
+function rowToArray(row) 
+{
+    var rowData = [];
+    for (var j = 0; j < row.cells.length; j++) 
+    {
+        var select = row.cells[j].getElementsByTagName('select')[0];
+        var value = select.options[select.selectedIndex].value;
+        rowData.push(value === 'X' ? 'X' : '');
+    }
+    console.log(rowData);
+    return rowData;
+}
+
+function tableToArray()
+{
+    var gameCodeElement = document.getElementById('game_code').textContent;
+
+    var table = document.getElementById("tableX");
+    var dataArray = [];
+
+    for (var i = 0; i < table.rows.length; i++) 
+    {
+        var row = table.rows[i];
+        rowData = rowToArray(row);
+        dataArray.push(rowData);
+    }
+    var dataToSend = JSON.stringify(dataArray)
+
+    return dataToSend
+}
+
+function getCookie(name) 
+{
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') 
+    {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) 
+        {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) 
+            {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+const csrftoken = getCookie('csrftoken');
+
+
+function sendData(dataToSend) 
+{
+    const url = '/mainGame/checkGamePiece';
+    fetch(url, 
+    {
+        method: 'POST', // or 'PUT'
+        headers: 
+        {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrftoken, // Include the CSRF token here
+    },
+        body: JSON.stringify({ dataToSend: dataToSend }), // send the data as JSON
+    })
+    .then(response => 
+    {
+        if (!response.ok) 
+        {
+            throw new Error('Network response was not ok');
+        }
+        return response.json(); // Convert the response to JSON
+    })
+    .then(data => 
+    {
+        console.log("Response Data:", data); // Log the entire data object for debugging
+    })
+    .catch(error => console.error('Error:', error)); // Add error handling
+}
+
+
+// Correctly set up interval to check the game state every 2 seconds
+setInterval(function() 
+{
+    var dataToSend = tableToArray(); // Convert the current game state to an array format
+    sendData(dataToSend); // Send the data
+}, 2000);
+
+</script>

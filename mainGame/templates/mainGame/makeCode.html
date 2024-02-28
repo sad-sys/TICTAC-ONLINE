@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join session </title>
+</head>
+<body>
+
+    <p id="game_code" data-game-state="{{ gameState }}" data-player-xarr="{{ playerXarr }}" data-player-oarr="{{ playerOarr }}">
+        {{ game_code }}
+    </p>
+
+    <form method="post" action="{% url 'joinAsChallenger' %}">
+        {% csrf_token %}
+        <label for="joinAsChallenger">Or input code: </label>
+        <input id="Input_game_code" type="text" name="game_code" value="">
+        <input type="submit" value="OK">
+        {% csrf_token %}
+    </form>
+</body>
+
+</body>
+</html>
+<script>
+
+function checkGameState() 
+{
+    var gameCodeElement = document.getElementById('game_code').textContent;
+    const url = '/mainGame/checkGameState?game_code=' + encodeURIComponent(gameCodeElement);
+
+    fetch(url)
+        .then(response => 
+        {
+            if (!response.ok) 
+            {
+                throw new Error('Network response was not ok');
+            }
+            return response.json(); // Convert the response to JSON
+        })
+        .then(data => 
+        {
+            console.log("Response Data:", data); // Log the entire data object for debugging
+            if (data.hasOwnProperty('gameState')) 
+            { 
+                console.log("GameState:", data.gameState); // Log the gameState
+                if (data.gameState === 1) 
+                {
+                    console.log("Done");
+                    window.location.href = '/mainGame/joinAsOpponent?game_code=' + encodeURIComponent(gameCodeElement);
+                }
+            } 
+            else 
+            {
+                console.error("gameState property is missing in the response");
+            }
+        })
+        .catch(error => console.error('Error:', error)); // Add error handling
+}
+setInterval(checkGameState, 2000); // Check the game state every 2 seconds
+</script>
