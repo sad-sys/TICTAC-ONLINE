@@ -12,6 +12,7 @@ import string
 
 issued_codes = set()  
 
+'Makes the game Code is used in the makeCode function below'
 def game_codeCode():
     now = datetime.datetime.now()
     random_part = random.choice(string.ascii_uppercase)
@@ -19,6 +20,7 @@ def game_codeCode():
     game_code = random_part  + second
     return game_code
 
+'Uses make code HTML to generate a user Code, then creates a corresponding gameSession object'
 def makeCode(request):
     game_code = game_codeCode()
     while GameSession.objects.filter(game_code=game_code).exists():
@@ -104,7 +106,6 @@ def joinAsOpponent(request):
     }
     # Render the template for the opponent, passing the context
     return render(request, 'mainGame/gamePageOChallenger.html', context)
-
 
 def checkGamePiece(request):
     if request.method == 'POST':
