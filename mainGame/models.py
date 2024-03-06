@@ -8,3 +8,4 @@ class GameSession(models.Model):
     gameState = models.IntegerField(null=True, blank=True, default = 0)
     numberOfMoves = models.IntegerField(blank=True, default = 0)
     gameTurn = models.IntegerField(null=True,default = 0)
+    playerTurn = models.IntegerField(null=True,default=0)

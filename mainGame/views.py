@@ -111,6 +111,14 @@ def checkGamePiece(request):
     if request.method == 'POST':
         data = json.loads(request.body)
         dataToSend = data.get('dataToSend')
-        print("POST", dataToSend)
+        game_code = data.get('game_code')
+        specificPlayer = GameSession.objects.get(game_code=game_code)
+        print ("Player Game Code", specificPlayer.game_code)
+        print ("Game State", specificPlayer.gameState)
+        specificPlayer.playerXArr = dataToSend
+        specificPlayer.save()
+        print ("PlayerX arr", specificPlayer.playerXArr)
+        print ("Player O arr", specificPlayer.playerOArr)
+
         # Process your data here
         return JsonResponse({'status': 'success', 'data': dataToSend})

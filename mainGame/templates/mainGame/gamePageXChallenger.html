@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CHALLENGER</title>
-    
+    <title>X CHALLENGER</title>
 </head>
+<style>body { background-color: #000000b3; }</style>
 <body>
    <P>THIS IS CHALLENGER</P>
    <p id="game_code">Generated Code: {{ game_code }}</p>
@@ -93,8 +93,6 @@ function rowToArray(row)
 
 function tableToArray()
 {
-    var gameCodeElement = document.getElementById('game_code').textContent;
-
     var table = document.getElementById("tableX");
     var dataArray = [];
 
@@ -107,6 +105,13 @@ function tableToArray()
     var dataToSend = JSON.stringify(dataArray)
 
     return dataToSend
+}
+
+function getGameCode()
+{
+    var gameCodeElement = document.getElementById('game_code').textContent;
+    var gameCode = gameCodeElement.split(': ')[1];
+    return gameCode
 }
 
 function getCookie(name) 
@@ -130,8 +135,7 @@ function getCookie(name)
 }
 const csrftoken = getCookie('csrftoken');
 
-
-function sendData(dataToSend) 
+function sendData(dataToSend, gameCode) 
 {
     const url = '/mainGame/checkGamePiece';
     fetch(url, 
@@ -142,7 +146,7 @@ function sendData(dataToSend)
         'Content-Type': 'application/json',
         'X-CSRFToken': csrftoken, // Include the CSRF token here
     },
-        body: JSON.stringify({ dataToSend: dataToSend }), // send the data as JSON
+        body: JSON.stringify({ game_code: gameCode, dataToSend: dataToSend }), // send the data as JSON
     })
     .then(response => 
     {
@@ -163,8 +167,10 @@ function sendData(dataToSend)
 // Correctly set up interval to check the game state every 2 seconds
 setInterval(function() 
 {
-    var dataToSend = tableToArray(); // Convert the current game state to an array format
-    sendData(dataToSend); // Send the data
-}, 2000);
+    var dataToSend = tableToArray();
+    var gameCode = getGameCode(); // Convert the current game state to an array format
+    console.log(gameCode)
+    sendData(dataToSend, gameCode); // Send the data
+}, 4000);
 
 </script>
