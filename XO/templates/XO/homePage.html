@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HomePage</title>
+</head>
+<body>
+    <h1>Tic-Tac-Toe</h1>
+    <div id="gameInfo">
+        <p>Game Code: <span id="gameCode">{{ gameCode }}</span></p>
+        <p>Game State: <span id="gameState" data-game-state="{{ gameState }}">{{ gameState }}</span></p>
+        <p>Game xArr: <span id="xArr" xArr="{{ xArr }}">{{ xArr }}</span></p>
+        <p>Game oArr: <span id="oArr" oArr="{{ oArr }}">{{ oArr }}</span></p>
+    </div>
+    <div>
+        <form method="post" action="{% url 'joinAsOOpponent' %}">
+            {% csrf_token %}
+            <input id="gameCodeInput" type="text" name="gameCodeInput" value="">
+            <input type="submit" value="Join as O">
+            {% csrf_token %}
+        </form>
+    </div>
+<script>
+</script>
+<style>body { background-color: #000000b3; }</style>
+</html>

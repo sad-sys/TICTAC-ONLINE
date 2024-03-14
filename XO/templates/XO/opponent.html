@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opponent</title>
+</head>
+<style>
+    #grid 
+    {
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    grid-template-rows: repeat(3, 100px);
+    gap: 10px;
+    }
+
+    .cell 
+    {
+    width: 100px;
+    height: 100px;
+    background-color: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    }
+
+    .circle 
+    {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: blue;
+    }
+</style>
+<body>
+    <h1>Tic-Tac-Toe</h1>
+    <p> You are an Opponent With The O</p>
+    <div id="gameInfo">
+        <p>Game Code: <span id="gameCode">{{ gameCode }}</span></p>
+        <p>Game State: <span id="gameState" data-game-state="{{ gameState }}">{{ gameState }}</span></p>
+        <p>Game xArr: <span id="xArr" xArr="{{ xArr }}">{{ xArr }}</span></p>
+        <p>Game oArr: <span id="oArr" oArr="{{ oArr }}">{{ oArr }}</span></p>
+    </div>
+    <div id="grid">
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+      </div>      
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    document.querySelectorAll('.cell').forEach(cell => 
+    {
+        cell.addEventListener('click', function() 
+        {
+            const circle = document.createElement('div');
+            circle.classList.add('circle');
+            this.appendChild(circle);
+        });
+    });
+
+</script>
+<style>body { background-color: #900505b3; }</style>
+</html>
